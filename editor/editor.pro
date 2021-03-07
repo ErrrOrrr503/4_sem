@@ -11,10 +11,12 @@ CONFIG += c++17
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
+    ogl_out.cpp \
     opendialog.cpp
 
 HEADERS += \
     mainwindow.h \
+    ogl_out.h \
     opendialog.h
 
 FORMS += \

@@ -1,9 +1,7 @@
 #include "opendialog.h"
 #include "ui_opendialog.h"
 
-OpenDialog::OpenDialog(QWidget *parent, flag_saveload in_flag) :
-    QDialog(parent),
-    ui(new Ui::OpenDialog)
+OpenDialog::OpenDialog(QWidget *parent, flag_saveload in_flag) : QDialog(parent), ui(new Ui::OpenDialog)
 {
     ui->setupUi(this);
     setWindowModality(Qt::ApplicationModal);

@@ -1,12 +1,20 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     ui->console->setReadOnly(true);
+
+    ogl_layout = new QHBoxLayout(ui->frame_ogl);
+    ogl_layout->setContentsMargins(0, 0, 0, 0);
+    ogl_layout->setSpacing(0);
+    ogl_out = new oGL_out(ui->frame_ogl);
+    QObject::connect(ogl_out, &oGL_out::print_console,
+                     this, &MainWindow::print_console);
+    ogl_layout->addWidget(ogl_out);
+    ogl_out->show();
+
     change_mode(draw);
     print_console("Ready");
 }
@@ -14,6 +22,8 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete ogl_out;
+    delete ogl_layout;
 }
 
 

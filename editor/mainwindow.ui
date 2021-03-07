@@ -31,7 +31,7 @@
      <number>0</number>
     </property>
     <item>
-     <widget class="QFrame" name="frame">
+     <widget class="QFrame" name="frame_main">
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
       </property>
@@ -55,10 +55,17 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QOpenGLWidget" name="oGL_out"/>
+        <widget class="QFrame" name="frame_ogl">
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+        </widget>
        </item>
        <item>
-        <widget class="QFrame" name="frame_3">
+        <widget class="QFrame" name="frame_tools">
          <property name="minimumSize">
           <size>
            <width>80</width>
@@ -152,7 +159,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QFrame" name="frame_2">
+     <widget class="QFrame" name="frame_console">
       <property name="minimumSize">
        <size>
         <width>0</width>
@@ -204,7 +211,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QFrame" name="frame_4">
+        <widget class="QFrame" name="frame_misc">
          <property name="minimumSize">
           <size>
            <width>160</width>

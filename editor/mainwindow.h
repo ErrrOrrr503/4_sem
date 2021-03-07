@@ -3,7 +3,9 @@
 
 #include <QMainWindow>
 #include <QTime>
+#include <QLayout>
 #include "opendialog.h"
+#include "ogl_out.h"
 #include <fstream>
 #include <filesystem>
 
@@ -25,13 +27,13 @@ public:
     ~MainWindow();
 
 private:
-    void print_console (const std::string &s);
-
     void change_mode (edit_mode in_mode);
 
     void open_file_dialog(flag_saveload flag);
 
 private slots:
+    void print_console (const std::string &s);
+
     void on_drawButton_clicked();
 
     void on_selectButton_clicked();
@@ -45,6 +47,8 @@ private slots:
 private:
     Ui::MainWindow *ui;
     OpenDialog *opendialog;
+    oGL_out *ogl_out;
+    QHBoxLayout *ogl_layout;
     edit_mode mode;
     std::ofstream outfile;
 };
