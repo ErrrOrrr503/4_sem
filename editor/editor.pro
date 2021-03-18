@@ -12,12 +12,14 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     ogl_out.cpp \
-    opendialog.cpp
+    opendialog.cpp \
+    sphere.cpp
 
 HEADERS += \
     mainwindow.h \
     ogl_out.h \
-    opendialog.h
+    opendialog.h \
+    sphere.h
 
 FORMS += \
     mainwindow.ui \
