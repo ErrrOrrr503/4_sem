@@ -9,9 +9,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ogl_layout = new QHBoxLayout(ui->frame_ogl);
     ogl_layout->setContentsMargins(0, 0, 0, 0);
     ogl_layout->setSpacing(0);
-    ogl_out = new oGL_out(ui->frame_ogl);
+    ogl_out = new oGL_out(ui->frame_ogl, &level);
     QObject::connect(ogl_out, &oGL_out::print_console,
                      this, &MainWindow::print_console);
+    QObject::connect(this, &MainWindow::ogl_change_mode,
+                     ogl_out, &oGL_out::ogl_change_mode);
     ogl_layout->addWidget(ogl_out);
     ogl_out->show();
 
@@ -69,6 +71,7 @@ void MainWindow::change_mode (edit_mode in_mode)
     }
     console += " mode";
     print_console(console);
+    emit ogl_change_mode(in_mode);
 }
 
 void MainWindow::on_actionSave_triggered()
@@ -97,8 +100,6 @@ void MainWindow::open_file_dialog(flag_saveload flag)
     QObject::connect(opendialog, &OpenDialog::filename_read,
                      this, &MainWindow::on_opendialog_finish);
     opendialog->show();
-
-    //and where is delete?
 }
 
 void MainWindow::on_opendialog_finish(const std::string &filename, flag_saveload flag)

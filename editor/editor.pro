@@ -9,15 +9,21 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    cursor.cpp \
+    level.cpp \
     main.cpp \
     mainwindow.cpp \
     ogl_out.cpp \
-    opendialog.cpp
+    opendialog.cpp \
+    sphere.cpp
 
 HEADERS += \
+    cursor.h \
+    level.h \
     mainwindow.h \
     ogl_out.h \
-    opendialog.h
+    opendialog.h \
+    sphere.h
 
 FORMS += \
     mainwindow.ui \
