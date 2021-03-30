@@ -45,5 +45,6 @@ private:
     QHBoxLayout *ogl_layout;
     edit_mode mode;
     std::ofstream outfile;
+    std::string outfilename;
 };
 #endif // MAINWINDOW_H

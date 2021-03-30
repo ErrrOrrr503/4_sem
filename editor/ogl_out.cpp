@@ -41,6 +41,7 @@ void oGL_out::resizeGL(int nWidth, int nHeight)
 {
     static int oWidth = 0, oHeight = 0;
     static float prev_angle;
+#ifdef DEBUG_DRAW
     std::string console;
     if (nWidth == oWidth && nHeight  == oHeight && z_angle == prev_angle)
         console = "center moved: new x0 = " + std::to_string(center_x) + " new y0 = " + std::to_string(center_y);
@@ -50,6 +51,7 @@ void oGL_out::resizeGL(int nWidth, int nHeight)
         console = "rotated: " + std::to_string(z_angle);
     emit print_console(console);
     console.clear();
+#endif
     f30->glMatrixMode(GL_PROJECTION);
     f30->glLoadIdentity();
     //1 pixel is a basic value
@@ -101,8 +103,11 @@ void oGL_out::mousePressEvent(QMouseEvent *me)
     cursor.type = plain;
     cursor.set(me->localPos().x(), me->localPos().y(), height(), width(), center_x, center_y, z_angle, scale);
     level->select_wall(cursor.cur_x, cursor.cur_y);
+    level->add_wall();
     update();
+#ifdef DEBUG_DRAW
     emit print_console("mouse pointed to x = " + std::to_string(cursor.cur_x) + " y = " + std::to_string(cursor.cur_y));
+#endif
     old_center_x = center_x;
     old_center_y = center_y;
 }
@@ -174,8 +179,17 @@ void oGL_out::level_paint()
         glVertex2f(level->level_y, i);
     }
     f30->glEnd();
+
     f30->glLineWidth(3);
-    f30->glColor3f(0.3, 0.8, 0);
+    f30->glColor3f(0.0, 0.4, 0.7);
+    f30->glBegin(GL_LINES);
+    for (size_t i = 0; i < level->walls.size (); i++) {
+        glVertex2f(level->walls[i].a1[0], level->walls[i].a1[1]);
+        glVertex2f(level->walls[i].a2[0], level->walls[i].a2[1]);
+    }
+    f30->glEnd();
+    f30->glLineWidth(3);
+    f30->glColor3f(0.4, 0.8, 0);
     f30->glBegin(GL_LINES);
     glVertex2f(level->selected_wall.a1[0], level->selected_wall.a1[1]);
     glVertex2f(level->selected_wall.a2[0], level->selected_wall.a2[1]);

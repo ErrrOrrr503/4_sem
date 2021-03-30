@@ -20,6 +20,7 @@ SOURCES += \
 HEADERS += \
     cursor.h \
     level.h \
+    level_common.h \
     mainwindow.h \
     ogl_out.h \
     opendialog.h \

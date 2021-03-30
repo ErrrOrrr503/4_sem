@@ -3,6 +3,9 @@
 
 #include <vector>
 #include <cmath>
+#include <QObject>
+#include <fstream>
+#include "level_common.h"
 
 enum edit_mode {
     sel,
@@ -15,18 +18,25 @@ struct wall {
     float color[3];
 };
 
-class Level
+class Level : public QObject
 {
+    Q_OBJECT //just for using signal to access console
 public:
     Level();
     void select_wall (float x, float y);
+    void add_wall ();
+    void delete_wall (wall wall);
+    void save_level (std::ofstream &outfile);
 
-    std::vector<wall> level;
+    std::vector<wall> walls;
     wall selected_wall;
     const float level_x = 10000;
     const float level_y = 10000;
     const float cell_size = 50;
 private:
+    int wall_is_present (wall wall);
+signals:
+    void print_console (const std::string &s);
 };
 
 #endif // LEVEL_H

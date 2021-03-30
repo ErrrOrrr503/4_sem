@@ -10,12 +10,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ogl_layout->setContentsMargins(0, 0, 0, 0);
     ogl_layout->setSpacing(0);
     ogl_out = new oGL_out(ui->frame_ogl, &level);
+    ogl_layout->addWidget(ogl_out);
+    ogl_out->show();
+
     QObject::connect(ogl_out, &oGL_out::print_console,
+                     this, &MainWindow::print_console);
+    QObject::connect(&level, &Level::print_console,
                      this, &MainWindow::print_console);
     QObject::connect(this, &MainWindow::ogl_change_mode,
                      ogl_out, &oGL_out::ogl_change_mode);
-    ogl_layout->addWidget(ogl_out);
-    ogl_out->show();
 
     change_mode(draw);
     print_console("Ready");
@@ -26,6 +29,7 @@ MainWindow::~MainWindow()
     delete ui;
     delete ogl_out;
     delete ogl_layout;
+    outfile.close();
 }
 
 
@@ -76,11 +80,17 @@ void MainWindow::change_mode (edit_mode in_mode)
 
 void MainWindow::on_actionSave_triggered()
 {
-    if (outfile.is_open()) {
-        print_console("fixme::save_when_opened");
+    if (outfile.is_open ()) {
+        outfile.close ();
+        outfile.open (outfilename, outfile.binary | outfile.out | outfile.trunc); //truncate
+        if (!outfile.is_open()) {
+            print_console ("failed to truncate file while saving");
+            return;
+        }
+        level.save_level (outfile);
     }
     else {
-        open_file_dialog(save);
+        open_file_dialog (save);
     }
 }
 
@@ -90,7 +100,7 @@ void MainWindow::on_actionLoad_triggered()
         //fixme::unsaved dialog
     }
     else {
-        open_file_dialog(load);
+        open_file_dialog (load);
     }
 }
 
@@ -104,6 +114,7 @@ void MainWindow::open_file_dialog(flag_saveload flag)
 
 void MainWindow::on_opendialog_finish(const std::string &filename, flag_saveload flag)
 {
+    outfilename = filename;
     std::string console;
     console = "opening for ";
     if (flag == save)
@@ -117,15 +128,32 @@ void MainWindow::on_opendialog_finish(const std::string &filename, flag_saveload
         print_console(console);
         return;
     }
-    //file exists - reopen as input or no file - create
-    outfile.open(filename, outfile.out);
-    if (!outfile.is_open()) {
-        console += "FAILED";
-        print_console(console);
-        return;
+    //file exists
+    if (flag == save) {
+        outfile.open(filename, outfile.binary | outfile.out | outfile.trunc);
+        if (!outfile.is_open()) {
+            print_console(console + "FAILED");
+            return;
+        }
+        print_console(console + "SUCCESS");
+        level.save_level (outfile);
     }
-    console += "SUCCESS";
-    print_console(console);
-    console.clear();
-    //hear load or store processing...
+    if (flag == load) {
+        print_console ("FIXME");
+        return;
+        std::ifstream infile;
+        infile.open(filename, infile.binary | infile.in);
+        if (!infile.is_open()) {
+            print_console(console + "FAILED");
+            return;
+        }
+        //level.load_level (infile); //fixme
+        infile.close ();
+        outfile.open(filename, outfile.binary | outfile.out | outfile.trunc);
+        if (!outfile.is_open()) {
+            print_console(console + "FAILED");
+            return;
+        }
+        print_console (console += "SUCCESS");
+    }
 }
