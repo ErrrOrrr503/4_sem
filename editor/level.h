@@ -25,14 +25,15 @@ public:
     Level();
     void select_wall (float x, float y);
     void add_wall ();
+    void delete_wall ();
     void delete_wall (wall wall);
     int save_level (std::ofstream &outfile);
     int load_level (std::ifstream &infile);
 
     std::vector<wall> walls;
     wall selected_wall;
-    const float level_x = 1000;
-    const float level_y = 1000;
+    const float level_x = 10000;
+    const float level_y = 10000;
     const float cell_size = 50;
 private:
     int wall_is_present (wall wall);

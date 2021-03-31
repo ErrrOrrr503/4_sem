@@ -98,10 +98,13 @@ void oGL_out::mouseMoveEvent(QMouseEvent *me)
 
 void oGL_out::mousePressEvent(QMouseEvent *me)
 {
-    cursor.type = plain;
+    if (cursor.type == none)
+        cursor.type = plain;
     cursor.set(me->localPos().x(), me->localPos().y(), height(), width(), center_x, center_y, z_angle, scale);
-    level->select_wall(cursor.cur_x, cursor.cur_y);
-    level->add_wall();
+    if (cursor.type == sel_mode || cursor.type == draw_mode)
+        level->select_wall(cursor.cur_x, cursor.cur_y);
+    if (cursor.type == draw_mode)
+        level->add_wall();
     update();
 #ifdef DEBUG_DRAW
     emit print_console("mouse pointed to x = " + std::to_string(cursor.cur_x) + " y = " + std::to_string(cursor.cur_y));
@@ -137,6 +140,7 @@ void oGL_out::ogl_change_mode (edit_mode in_mode)
     default:
         break;
     }
+    update ();
 }
 
 void oGL_out::pointers_paint()
@@ -163,35 +167,35 @@ void oGL_out::pointers_paint()
 
 void oGL_out::level_paint()
 {
-    f30->glClearColor(0.2, 0.2, 0.2, 0.0);
-    f30->glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    f30->glLineWidth(1);
-    f30->glColor3f(0, 0.6, 0);
-    f30->glBegin(GL_LINES);
+    f30->glClearColor (0.2, 0.2, 0.2, 0.0);
+    f30->glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    f30->glLineWidth (1);
+    f30->glColor3f (0, 0.6, 0);
+    f30->glBegin (GL_LINES);
     for (float i = -level->level_x; i < level->level_x; i += level->cell_size) {
-        glVertex2f(i, -level->level_y);
-        glVertex2f(i, level->level_y);
+        glVertex2f (i, -level->level_y);
+        glVertex2f (i, level->level_y);
     }
     for (float i = -level->level_y; i < level->level_y; i += level->cell_size) {
-        glVertex2f(-level->level_x, i);
-        glVertex2f(level->level_y, i);
+        glVertex2f (-level->level_x, i);
+        glVertex2f (level->level_y, i);
     }
-    f30->glEnd();
+    f30->glEnd ();
 
-    f30->glLineWidth(3);
-    f30->glColor3f(0.0, 0.4, 0.7);
-    f30->glBegin(GL_LINES);
+    f30->glLineWidth (3);
+    f30->glColor3f (0.0, 0.4, 0.7);
+    f30->glBegin (GL_LINES);
     for (size_t i = 0; i < level->walls.size (); i++) {
         glVertex2f(level->walls[i].a1[0], level->walls[i].a1[1]);
         glVertex2f(level->walls[i].a2[0], level->walls[i].a2[1]);
     }
-    f30->glEnd();
-    f30->glLineWidth(3);
-    f30->glColor3f(0.4, 0.8, 0);
-    f30->glBegin(GL_LINES);
-    glVertex2f(level->selected_wall.a1[0], level->selected_wall.a1[1]);
-    glVertex2f(level->selected_wall.a2[0], level->selected_wall.a2[1]);
-    f30->glEnd();
+    f30->glEnd ();
+    f30->glLineWidth (3);
+    f30->glColor3f (0.4, 0.8, 0);
+    f30->glBegin (GL_LINES);
+    glVertex2f (level->selected_wall.a1[0], level->selected_wall.a1[1]);
+    glVertex2f (level->selected_wall.a2[0], level->selected_wall.a2[1]);
+    f30->glEnd ();
 }
 
 void oGL_out::test_paint()

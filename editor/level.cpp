@@ -22,8 +22,16 @@ void Level::select_wall (float x, float y)
 
 void Level::add_wall ()
 {
-    if (!wall_is_present (selected_wall))
+    if (wall_is_present (selected_wall) < 0)
         walls.push_back(selected_wall);
+}
+
+void Level::delete_wall ()
+{
+    int pos = wall_is_present (selected_wall);
+    if (pos < 0)
+        return;
+    walls.erase (walls.begin () + pos);
 }
 
 int Level::wall_is_present (wall wall)
@@ -31,9 +39,9 @@ int Level::wall_is_present (wall wall)
     for (size_t i = 0; i < walls.size (); i++) {
         if (walls[i].a1[0] == wall.a1[0] && walls[i].a1[1] == wall.a1[1] &&
             walls[i].a2[0] == wall.a2[0] && walls[i].a2[1] == wall.a2[1])
-            return 1;
+            return i;
     }
-    return 0;
+    return -1;
 }
 
 int Level::save_level (std::ofstream &outfile)

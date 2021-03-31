@@ -35,22 +35,22 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_drawButton_clicked()
 {
-    change_mode(draw);
+    change_mode (draw);
 }
 
 void MainWindow::on_selectButton_clicked()
 {
-    change_mode(sel);
+    change_mode (sel);
 }
 
 void MainWindow::print_console (const std::string &s)
 {
-    ui->console->insertPlainText("[");
-    ui->console->insertPlainText(QTime::currentTime().toString("h:m:s"));
-    ui->console->insertPlainText("]> ");
-    ui->console->insertPlainText(QString::fromStdString(s));
-    ui->console->insertPlainText("\n");
-    ui->console->ensureCursorVisible();
+    ui->console->insertPlainText ("[");
+    ui->console->insertPlainText (QTime::currentTime().toString("h:m:s"));
+    ui->console->insertPlainText ("]> ");
+    ui->console->insertPlainText (QString::fromStdString (s));
+    ui->console->insertPlainText ("\n");
+    ui->console->ensureCursorVisible ();
 }
 
 void MainWindow::change_mode (edit_mode in_mode)
@@ -74,7 +74,9 @@ void MainWindow::change_mode (edit_mode in_mode)
         break;
     }
     console += " mode";
+#ifdef DEBUG_MISC
     print_console(console);
+#endif
     emit ogl_change_mode(in_mode);
 }
 
@@ -94,7 +96,7 @@ void MainWindow::on_actionSave_triggered()
     }
 }
 
-void MainWindow::on_actionLoad_triggered()
+void MainWindow::on_actionLoad_triggered ()
 {
     if (0){
         //fixme::unsaved dialog
@@ -104,7 +106,13 @@ void MainWindow::on_actionLoad_triggered()
     }
 }
 
-void MainWindow::open_file_dialog(flag_saveload flag)
+void MainWindow::on_actionDelete_wall_triggered ()
+{
+    level.delete_wall ();
+    ogl_out->update ();
+}
+
+void MainWindow::open_file_dialog (flag_saveload flag)
 {
     opendialog = new OpenDialog(this, flag);
     QObject::connect(opendialog, &OpenDialog::filename_read,
@@ -125,7 +133,7 @@ void MainWindow::on_opendialog_finish(const std::string &filename, flag_saveload
     console += "' ";
     if (!std::filesystem::exists(filename) && flag == load){ // if no file to load
         console += "FAILED: check existing";
-        print_console(console);
+        print_console (console);
         return;
     }
     //file exists
@@ -142,15 +150,19 @@ void MainWindow::on_opendialog_finish(const std::string &filename, flag_saveload
         std::ifstream infile;
         infile.open(filename, infile.binary | infile.in);
         if (!infile.is_open()) {
-            print_console(console + "FAILED");
+            print_console(console + "FAILED for read");
             return;
         }
-        if (level.load_level (infile))
+        if (level.load_level (infile)) {
+            infile.close ();
+            print_console (console + "SUCCESS for read");
+            print_console ("level loading failed!");
             return;
+        }
         infile.close ();
-        outfile.open(filename, outfile.binary | outfile.out);
+        outfile.open(filename, outfile.binary | outfile.out | outfile.in);
         if (!outfile.is_open()) {
-            print_console(console + "FAILED");
+            print_console(console + "FAILED for write");
             return;
         }
         print_console (console += "SUCCESS");

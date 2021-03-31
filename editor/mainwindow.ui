@@ -253,7 +253,14 @@
     <addaction name="actionSave"/>
     <addaction name="actionLoad"/>
    </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <addaction name="actionDelete_wall"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
   </widget>
   <action name="actionSave">
    <property name="text">
@@ -269,6 +276,14 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+L</string>
+   </property>
+  </action>
+  <action name="actionDelete_wall">
+   <property name="text">
+    <string>Delete wall</string>
+   </property>
+   <property name="shortcut">
+    <string>Del</string>
    </property>
   </action>
  </widget>
