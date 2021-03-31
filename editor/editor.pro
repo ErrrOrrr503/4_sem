@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     cursor.cpp \
+    filename_enter.cpp \
     level.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -19,6 +20,7 @@ SOURCES += \
 
 HEADERS += \
     cursor.h \
+    filename_enter.h \
     level.h \
     level_common.h \
     mainwindow.h \

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>90</height>
+    <width>800</width>
+    <height>92</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -72,18 +72,12 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="QPlainTextEdit" name="filename">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>30</height>
-         </size>
+       <widget class="QFrame" name="frame_filename">
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
         </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>30</height>
-         </size>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
         </property>
        </widget>
       </item>

@@ -2,6 +2,9 @@
 #define OPENDIALOG_H
 
 #include <QDialog>
+#include <QPlainTextEdit>
+#include <QFileDialog>
+#include "filename_enter.h"
 
 namespace Ui {
 class OpenDialog;
@@ -27,9 +30,14 @@ private slots:
 
     void on_actionMainAction_triggered();
 
+    void on_opendialog_selectButton_clicked();
+
 private:
     Ui::OpenDialog *ui;
     flag_saveload flag;
+    filename_enter *filename_field;
+    std::string filename;
+    QLayout *filename_layout;
 
 signals:
     void filename_read(const std::string &filename, flag_saveload flag);

@@ -139,21 +139,21 @@ void MainWindow::on_opendialog_finish(const std::string &filename, flag_saveload
         level.save_level (outfile);
     }
     if (flag == load) {
-        print_console ("FIXME");
-        return;
         std::ifstream infile;
         infile.open(filename, infile.binary | infile.in);
         if (!infile.is_open()) {
             print_console(console + "FAILED");
             return;
         }
-        //level.load_level (infile); //fixme
+        if (level.load_level (infile))
+            return;
         infile.close ();
-        outfile.open(filename, outfile.binary | outfile.out | outfile.trunc);
+        outfile.open(filename, outfile.binary | outfile.out);
         if (!outfile.is_open()) {
             print_console(console + "FAILED");
             return;
         }
         print_console (console += "SUCCESS");
+        ogl_out->update ();
     }
 }

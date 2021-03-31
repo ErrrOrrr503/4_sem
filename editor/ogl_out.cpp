@@ -41,17 +41,15 @@ void oGL_out::resizeGL(int nWidth, int nHeight)
 {
     static int oWidth = 0, oHeight = 0;
     static float prev_angle;
-#ifdef DEBUG_DRAW
     std::string console;
     if (nWidth == oWidth && nHeight  == oHeight && z_angle == prev_angle)
         console = "center moved: new x0 = " + std::to_string(center_x) + " new y0 = " + std::to_string(center_y);
     if (nWidth != oWidth || nHeight  != oHeight)
         console = "ogl resize: new x = " + std::to_string(nWidth) + " new y = " + std::to_string(nHeight);
     if (z_angle != prev_angle)
-        console = "rotated: " + std::to_string(z_angle);
-    emit print_console(console);
+        console = "rotated: " + std::to_string(z_angle);;
+    emit print_console (console);                                               // NESESSARY!!! NOT JUST DEBUG, without it mouse is broken LMAO
     console.clear();
-#endif
     f30->glMatrixMode(GL_PROJECTION);
     f30->glLoadIdentity();
     //1 pixel is a basic value
@@ -119,7 +117,7 @@ void oGL_out::wheelEvent(QWheelEvent *me)
     scale += (float) me->angleDelta().y() / 500;
     cursor.antiscale(scale);
     QResizeEvent *myResizeEvent = new QResizeEvent(QSize(size()), QSize(size())); //call resize staff that places center where needed
-    QCoreApplication::postEvent(this, myResizeEvent);
+    QCoreApplication::postEvent (this, myResizeEvent);
 }
 
 void oGL_out::mouseReleaseEvent(QMouseEvent *me)
